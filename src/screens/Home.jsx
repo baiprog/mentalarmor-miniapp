@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase";
-
-const uid = window.Telegram.WebApp.initDataUnsafe?.user?.id?.toString();
+import { db } from "../firebase"; // путь может быть ../firebase, если ты в src
 
 function calcDays(startTimestamp) {
   const msPerDay = 86400000;
@@ -11,11 +9,20 @@ function calcDays(startTimestamp) {
 
 export default function Home() {
   const [data, setData] = useState(null);
+  const [uid, setUid] = useState(null);
 
   useEffect(() => {
-    if (!uid) return;
+    const tg = window.Telegram?.WebApp;
+    if (!tg || !tg.initDataUnsafe?.user?.id) {
+      console.warn("Открыто вне Telegram Mini App");
+      return;
+    }
+
+    const uidFromTG = tg.initDataUnsafe.user.id.toString();
+    setUid(uidFromTG);
+
     const load = async () => {
-      const docRef = doc(db, "users", uid);
+      const docRef = doc(db, "users", uidFromTG);
       const docSnap = await getDoc(docRef);
       setData(docSnap.data());
     };
@@ -23,17 +30,15 @@ export default function Home() {
   }, []);
 
   const handleReset = async (type) => {
-    const field = {
-      startDateSmoke: Date.now(),
-      startDateAlcohol: Date.now()
-    };
+    if (!uid) return;
     await updateDoc(doc(db, "users", uid), {
       [type]: Date.now()
     });
     setData({ ...data, [type]: Date.now() });
   };
 
-  if (!data) return <div className="text-center p-4">Загрузка...</div>;
+  if (!uid) return <div className="p-4 text-white">Открой Mini App через Telegram</div>;
+  if (!data) return <div className="text-center p-4 text-white">Загрузка...</div>;
 
   return (
     <div className="flex flex-col gap-4 p-4 text-center text-white bg-[#0e0e0e] min-h-screen">
