@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "./hooks/useAuth.js";
-import Home from "./screens/Home.jsx";
+import { useAuth } from "./hooks/useAuth";
+import Home from "./screens/Home"; // если у тебя есть Home.jsx
 
 export default function App() {
   const { isAuth, signIn } = useAuth();
@@ -8,6 +8,7 @@ export default function App() {
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
+    console.log("Telegram initData:", tg?.initData); // debug
     if (tg?.initData) {
       tg.ready?.();
       signIn(tg.initData);
@@ -15,15 +16,12 @@ export default function App() {
     setReady(true);
   }, []);
 
-  if (!ready) {
-    return <div className="text-white p-4">Загрузка...</div>;
-  }
+  if (!ready) return <div className="text-white p-4">Загрузка...</div>;
 
-  if (!isAuth) {
-    return <div className="text-white p-4">Открой через Telegram Mini App</div>;
-  }
+  if (!isAuth) return <div className="text-white p-4">Открой через Telegram Mini App</div>;
 
-  return <Home />;
+  return <Home />; // или <h1>Authenticated</h1>
 }
+
 
 

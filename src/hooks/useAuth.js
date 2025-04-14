@@ -7,18 +7,18 @@ export const useAuth = () => {
   const signIn = async (initData) => {
     try {
       const { data } = await axios.post(
-  "https://mentalarmor-backend.onrender.com/auth/signin",
-  { initData },
-  { withCredentials: true }
-);
-
+        'https://mentalarmor-backend.onrender.com/auth/signin',
+        { initData },
+        { withCredentials: true }
+      );
       setIsAuth(data === true);
     } catch (err) {
-      console.error("Ошибка авторизации:", err);
+      console.error('Ошибка авторизации:', err);
       setIsAuth(false);
     }
   };
 
   return { isAuth, signIn };
 };
+
 
