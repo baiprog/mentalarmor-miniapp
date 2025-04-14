@@ -1,20 +1,23 @@
-import { useState } from "react";
-import axios from "axios";
+import axios from 'axios';
+import { useState } from 'react';
 
 export const useAuth = () => {
   const [isAuth, setIsAuth] = useState(false);
 
   const signIn = async (initData) => {
     try {
-      const res = await axios.post("https://mentalarmor-miniapp.onrender.com/auth/signin", { initData }, {
-        withCredentials: true,
-      });
-      setIsAuth(res.data === true);
+      const { data } = await axios.post(
+        "https://mentalarmor-backend.onrender.com/auth/signin",
+        { initData },
+        { withCredentials: true } // важно: для httpOnly куков
+      );
+      setIsAuth(data === true);
     } catch (err) {
-      console.error("Auth failed", err);
+      console.error("Ошибка авторизации:", err);
       setIsAuth(false);
     }
   };
 
   return { isAuth, signIn };
 };
+
