@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "./hooks/useAuth";
-import Home from "./screens/Home";
+import { useAuth } from "./hooks/useAuth.js";
+import Home from "./screens/Home.jsx";
 
 export default function App() {
   const { isAuth, signIn } = useAuth();
@@ -10,7 +10,7 @@ export default function App() {
     const tg = window.Telegram?.WebApp;
     if (tg?.initData) {
       tg.ready?.();
-      signIn(tg.initData); // ✅ отправка initData на backend
+      signIn(tg.initData);
     }
     setReady(true);
   }, []);
@@ -25,4 +25,5 @@ export default function App() {
 
   return <Home />;
 }
+
 
