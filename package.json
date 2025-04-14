@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@telegram-apps/init-data-node": "^2.0.3",
     "autoprefixer": "^10.4.2",
+    "axios": "^1.8.4",
     "firebase": "^11.6.0",
+    "jsonwebtoken": "^9.0.2",
     "postcss": "^8.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
